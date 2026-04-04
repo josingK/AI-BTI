@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-BTI: 나의 AI 부캐 찾기</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --tier-a: #f1c40f;
+            --tier-bc: #2ecc71;
+            --tier-d: #95a5a6;
+            --bg-color: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        /* 메인 시작 화면 */
+        #start-screen h1 { font-size: 2rem; margin-bottom: 10px; color: var(--primary-color); }
+        #start-screen p { color: #7f8c8d; margin-bottom: 30px; line-height: 1.6; }
+
+        /* 프로그레스 바 */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-ing {
+            width: 0%;
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        /* 질문 영역 */
+        #quiz-screen { display: none; }
+        .question-text { font-size: 1.25rem; font-weight: 700; margin-bottom: 25px; line-height: 1.4; height: 3.5rem; }
+        
+        /* 답변 버튼 스타일 (리커트 척도) */
+        .answer-list { display: flex; flex-direction: column; gap: 12px; }
+        .btn-answer {
+            padding: 16px;
+            border: 2px solid #edf2f7;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .btn-answer:hover {
+            border-color: var(--primary-color);
+            background: #f0f7ff;
+            transform: translateY(-2px);
+        }
+
+        /* 결과 화면 */
+        #result-screen { display: none; animation: fadeIn 0.8s; }
+        .tier-badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; }
+        .nickname { font-size: 2.2rem; font-weight: 800; margin-bottom: 20px; color: #1a202c; }
+        .result-desc { background: #f8f9fa; padding: 20px; border-radius: 16px; text-align: left; line-height: 1.7; margin-bottom: 25px; }
+        
+        .btn-main {
+            padding: 18px 40px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-main:hover { background: #2980b9; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="start-screen">
+            <div style="font-size: 4rem; margin-bottom: 20px;">🤖</div>
+            <h1>AI-BTI 테스트</h1>
+            <p>16가지 업무 스킬로 알아보는<br>나의 생성 AI 활용 부캐는 무엇일까요?</p>
+            <button class="btn-main" onclick="startQuiz()">테스트 시작하기</button>
+        </div>
+
+        <div class="progress-bar" id="progress-bar"><div class="progress-ing" id="progress-ing"></div></div>
+        <div id="quiz-screen">
+            <div class="question-text" id="question-text">질문 내용</div>
+            <div class="answer-list">
+                <button class="btn-answer" onclick="nextQuestion(5)">매우 잘한다 (자신 있음!)</button>
+                <button class="btn-answer" onclick="nextQuestion(4)">잘하는 편이다</button>
+                <button class="btn-answer" onclick="nextQuestion(3)">보통이다 (해본 적 있음)</button>
+                <button class="btn-answer" onclick="nextQuestion(2)">조금 서툴다</button>
+                <button class="btn-answer" onclick="nextQuestion(1)">전혀 못한다 (해본 적 없음)</button>
+            </div>
+        </div>
+
+        <div id="result-screen">
+            <div id="tier-badge" class="tier-badge">TIER</div>
+            <div class="nickname" id="result-nickname">부캐명</div>
+            <div class="result-desc" id="result-desc">설명</div>
+            <button class="btn-main" onclick="location.reload()">다시 테스트하기</button>
+        </div>
+    </div>
+
+    <script>
+        // 16개 스킬 문항 (순서대로 16개 중위권 직업과 매칭)
+        const questions = [
+            "AI에게 '단계별로 생각하라'는 논리적 지시를 자주 하시나요?", // 0: 논리 아키텍트
+            "AI로부터 원하는 답을 얻기 위해 질문을 정교하게 설계하시나요?", // 1: 프롬프트 장인
+            "난잡한 텍스트를 표(Table)나 규격화된 데이터로 잘 변환하시나요?", // 2: 데이터 마스터
+            "AI 답변의 진위 여부를 의심하고 팩트 체크를 꼼꼼히 하시나요?", // 3: 팩트 가디언
+            "새로운 프로젝트의 기획서 초안을 AI로 순식간에 만드시나요?", // 4: 기획 초안 제조
+            "작성한 글을 상황에 맞게 다른 말투나 문체로 자유롭게 바꾸시나요?", // 5: 문장 변신술사
+            "긴 보고서나 논문의 핵심 내용을 3줄 요약하는 데 능숙하신가요?", // 6: 핵심 요약 요정
+            "아이디어가 막힐 때 AI를 브레인스토밍 파트너로 활용하시나요?", // 7: 아이디어 뱅커
+            "간단한 프로그램이나 자동화 코드를 AI를 이용해 직접 짜시나요?", // 8: 코드 마법사
+            "원하는 답이 나올 때까지 질문을 5번 이상 이어가시나요?", // 9: 무한 질문 폭격
+            "외국어 문서를 자연스러운 현지 언어로 번역하거나 의역하시나요?", // 10: 글로벌 통역가
+            "반복적인 업무 루틴을 AI로 자동화하여 시간을 단축하시나요?", // 11: 업무 시간 절도
+            "발표 자료나 SNS에 쓸 이미지를 AI로 직접 생성하시나요?", // 12: 이미지 연출가
+            "복잡한 엑셀 수식이나 매크로 작성을 AI에게 시키시나요?", // 13: 엑셀 수식 도사
+            "비즈니스 전략이나 어려운 고민에 대해 AI에게 조언을 구하시나요?", // 14: 비즈니스 코치
+            "최신 트렌드나 특정 정보를 AI 검색 기능을 통해 수집하시나요?" // 15: 리서치 전문가
+        ];
+
+        // 20가지 직업 데이터
+        const jobData = {
+            tierA: [
+                { name: "AI 자동화 엔진", desc: "당신은 AI를 단순한 도구가 아닌 완벽한 시스템 부품으로 사용합니다. 업무 전체 프로세스를 자동화하여 인간의 개입을 최소화하는 신의 영역에 도달하셨군요!" },
+                { name: "에이전트 지휘관", desc: "당신은 여러 개의 AI를 팀 단위로 지휘하는 진정한 리더입니다. 복잡한 목표를 던져주고 AI들이 서로 협력하게 만드는 마스터 클래스입니다." }
+            ],
+            tierBC: [
+                { name: "논리 아키텍트", desc: "AI의 사고방식을 완벽히 이해하고 논리적 단계를 설계하는 능력이 탁월합니다." },
+                { name: "프롬프트 장인", desc: "질문 한 줄의 차이가 결과의 질을 결정한다는 것을 아는 언어의 마술사입니다." },
+                { name: "데이터 마스터", desc: "어떤 지저분한 정보도 기계가 읽기 좋은 깔끔한 데이터로 정렬하는 능력이 독보적입니다." },
+                { name: "팩트 가디언", desc: "AI의 환각 현상을 가장 예리하게 잡아내며, 데이터의 신뢰성을 확보하는 보안관 역할을 수행합니다." },
+                { name: "기획 초안 제조", desc: "백지 상태에서 결과물을 뽑아내는 속도가 압도적입니다. 기획의 뼈대를 세우는 데 천부적인 소질이 있습니다." },
+                { name: "문장 변신술사", desc: "대상과 상황에 따라 글의 톤을 자유자재로 바꾸는 커뮤니케이션의 달인입니다." },
+                { name: "핵심 요약 요정", desc: "정보의 바다에서 핵심만 낚아채는 능력이 뛰어납니다. 의사결정 시간을 혁신적으로 단축합니다." },
+                { name: "아이디어 뱅커", desc: "창의적 발상의 한계를 AI로 돌파하며, 끊임없이 새로운 관점을 제시하는 혁신가입니다." },
+                { name: "코드 마법사", desc: "코딩 실력과 상관없이 AI를 통해 자신만의 소프트웨어나 툴을 만들어내는 실력자입니다." },
+                { name: "무한 질문 폭격", desc: "답변이 만족스러울 때까지 집요하게 질문을 이어가 최선의 결과를 찾아내는 끈기 대장입니다." },
+                { name: "글로벌 통역가", desc: "전 세계의 언어 장벽을 허물고 글로벌 정보를 가장 빠르게 흡수하는 능력자입니다." },
+                { name: "업무 시간 절도", desc: "AI 활용의 본질인 '시간 단축'에 최적화된 유저입니다. 남들이 일할 때 당신은 이미 끝냈습니다." },
+                { name: "이미지 연출가", desc: "언어를 시각화하는 능력이 뛰어납니다. 머릿속 상상을 완벽한 이미지로 구현해냅니다." },
+                { name: "엑셀 수식 도사", desc: "더 이상 함수를 외우지 않습니다. 논리만으로 복잡한 시트를 제어하는 실무 고수입니다." },
+                { name: "비즈니스 코치", desc: "AI를 단순 도구가 아닌 전략적 파트너로 대우하며 고차원적인 인사이트를 얻어냅니다." },
+                { name: "리서치 전문가", desc: "웹 검색과 AI를 결합해 세상의 모든 최신 정보를 가장 효율적으로 수집합니다." }
+            ],
+            tierD: [
+                { name: "단순 질문 개미", desc: "아직은 AI에게 기초적인 질문만 던지고 계시군요. 하지만 시작이 반입니다! 조금만 더 깊게 대화해보세요." },
+                { name: "AI 관광 초보", desc: "AI라는 신대륙에 이제 막 도착한 관광객입니다. 신기한 기능들을 하나씩 체험하며 자신만의 스킬을 찾아보세요!" }
+            ]
+        };
+
+        let currentIdx = 0;
+        let scores = [];
+
+        function startQuiz() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('progress-bar').style.display = 'block';
+            document.getElementById('quiz-screen').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            document.getElementById('question-text').innerText = `${currentIdx + 1}. ${questions[currentIdx]}`;
+            const progress = ((currentIdx + 1) / questions.length) * 100;
+            document.getElementById('progress-ing').style.width = `${progress}%`;
+        }
+
+        function nextQuestion(score) {
+            scores.push(score);
+            if (currentIdx < questions.length - 1) {
+                currentIdx++;
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('progress-bar').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+
+            const totalScore = scores.reduce((a, b) => a + b, 0);
+            let finalJob = {};
+            let tierText = "";
+            let tierColor = "";
+
+            if (totalScore >= 70) {
+                // Tier A
+                finalJob = jobData.tierA[Math.floor(Math.random() * 2)];
+                tierText = "GOD TIER: 최상위 빌드 마스터";
+                tierColor = "#f1c40f";
+            } else if (totalScore < 25) {
+                // Tier D
+                finalJob = jobData.tierD[Math.floor(Math.random() * 2)];
+                tierText = "NEWBIE: 성장하는 초심자";
+                tierColor = "#95a5a6";
+            } else {
+                // Tier B/C: 16개 스킬 중 점수가 가장 높은 항목 찾기
+                let maxScore = 0;
+                let maxIdx = 0;
+                scores.forEach((s, i) => {
+                    if (s > maxScore) {
+                        maxScore = s;
+                        maxIdx = i;
+                    }
+                });
+                finalJob = jobData.tierBC[maxIdx];
+                tierText = "PRO TIER: 실무 최적화 고수";
+                tierColor = "#2ecc71";
+            }
+
+            const badge = document.getElementById('tier-badge');
+            badge.innerText = tierText;
+            badge.style.backgroundColor = tierColor;
+            badge.style.color = (totalScore < 25) ? "white" : "black";
+            
+            document.getElementById('result-nickname').innerText = finalJob.name;
+            document.getElementById('result-desc').innerHTML = `<strong>총점: ${totalScore}점 / 80점</strong><br><br>${finalJob.desc}`;
+        }
+    </script>
+</body>
+</html>
