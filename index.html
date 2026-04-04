@@ -113,7 +113,7 @@
             <div style="font-size: 4rem; margin-bottom: 20px;">🤖</div>
             <h2>나의 AI 부캐 찾기</h2>
             <h1>AI-BTI</h1>
-            <p>16개의 상황별 대처법으로 알아보는<br>나만의 생성 AI 활용 직업군 테스트</p>
+            <p>48개의 상세한 상황별 대처법으로 알아보는<br>나만의 생성 AI 활용 직업군 테스트</p>
             <button class="btn-main" onclick="startQuiz()">테스트 시작하기</button>
         </div>
 
@@ -133,7 +133,7 @@
     </div>
 
     <script>
-        // 문항 풀 (트리별 12문항)
+        // 문항 풀 (트리별 12문항, 총 48문항)
         const poolA = [
             "새로운 업무를 받으면 AI를 켜기 전, '어떤 순서로 일을 시킬지' 밑그림부터 그린다.",
             "AI에게 질문할 때 '너는 유능한 팀장이야'라며 상황에 몰입하게 만드는 페르소나를 부여한다.",
@@ -194,7 +194,7 @@
             "저작권이나 윤리적 문제가 발생할 소지가 있는 AI 결과물을 미리 감지하고 방어한다."
         ];
 
-        // 결과 직업 매핑 데이터
+        // 결과 직업 매핑 데이터 (점수 컷 3배로 증가: 12문항 기준)
         const jobs = {
             master: [
                 { name: "AI 총사령관", desc: "AI를 자유자재로 지휘하여 무인 업무 시스템을 지배하는 절대적 리더입니다." },
@@ -202,27 +202,27 @@
             ],
             specialist: {
                 A: [ // 기획/설계 특화
-                    { scoreReq: 17, name: "기획의 대가", desc: "[설계 특화] 업무의 뼈대를 단단하게 세우고, AI라는 도구가 들어설 자리를 한 치의 오차 없이 설계하는 거장입니다." },
-                    { scoreReq: 14, name: "질문의 조율사", desc: "[설계 특화] 사람의 언어를 AI가 가장 잘 이해하는 완벽한 명령어로 다듬는 가교 역할을 합니다." },
-                    { scoreReq: 11, name: "흐름의 연출가", desc: "[설계 특화] 반복 업무를 보면 무조건 자동화 파이프라인을 짜야 직성이 풀리는 시스템 연출가입니다." },
+                    { scoreReq: 51, name: "기획의 대가", desc: "[설계 특화] 업무의 뼈대를 단단하게 세우고, AI라는 도구가 들어설 자리를 한 치의 오차 없이 설계하는 거장입니다." },
+                    { scoreReq: 42, name: "질문의 조율사", desc: "[설계 특화] 사람의 언어를 AI가 가장 잘 이해하는 완벽한 명령어로 다듬는 가교 역할을 합니다." },
+                    { scoreReq: 33, name: "흐름의 연출가", desc: "[설계 특화] 반복 업무를 보면 무조건 자동화 파이프라인을 짜야 직성이 풀리는 시스템 연출가입니다." },
                     { scoreReq: 0,  name: "무대의 설계자", desc: "[설계 특화] 일의 시작과 끝을 완벽한 질문 리스트로 기획하는 꼼꼼한 설계자입니다." }
                 ],
                 B: [ // 검증/분석 특화
-                    { scoreReq: 17, name: "논리의 심판관", desc: "[분석 특화] AI 답변의 논리적 오류를 귀신같이 찾아내는 깐깐하고 예리한 심판관입니다." },
-                    { scoreReq: 14, name: "팩트 수사관", desc: "[분석 특화] AI가 거짓말(할루시네이션)을 하는지 끝까지 파헤치는 철저한 검증가입니다." },
-                    { scoreReq: 11, name: "구조의 감별사", desc: "[분석 특화] 뒤죽박죽인 정보를 완벽한 표와 도표로 깎아내는 정리의 달인입니다." },
+                    { scoreReq: 51, name: "논리의 심판관", desc: "[분석 특화] AI 답변의 논리적 오류를 귀신같이 찾아내는 깐깐하고 예리한 심판관입니다." },
+                    { scoreReq: 42, name: "팩트 수사관", desc: "[분석 특화] AI가 거짓말(할루시네이션)을 하는지 끝까지 파헤치는 철저한 검증가입니다." },
+                    { scoreReq: 33, name: "구조의 감별사", desc: "[분석 특화] 뒤죽박죽인 정보를 완벽한 표와 도표로 깎아내는 정리의 달인입니다." },
                     { scoreReq: 0,  name: "검증의 추적자", desc: "[분석 특화] 사소한 수치 하나라도 원문과 대조하여 완벽한 신뢰도를 확보하는 추적 전문가입니다." }
                 ],
                 C: [ // 생산/속도 특화
-                    { scoreReq: 17, name: "쾌속의 창조자", desc: "[생산 특화] 남들 한 시간 고민할 때 5분 만에 보고서 뼈대를 세우는 속도광입니다." },
-                    { scoreReq: 14, name: "요약의 현자", desc: "[생산 특화] 방대한 양의 문서를 핵심만 추려 전달하여 팀원들에게 지혜를 전수합니다." },
-                    { scoreReq: 11, name: "문장의 마술사", desc: "[생산 특화] 딱딱한 글을 상황과 대상에 맞게 자유자재로 변환하는 문장술사입니다." },
+                    { scoreReq: 51, name: "쾌속의 창조자", desc: "[생산 특화] 남들 한 시간 고민할 때 5분 만에 보고서 뼈대를 세우는 속도광입니다." },
+                    { scoreReq: 42, name: "요약의 현자", desc: "[생산 특화] 방대한 양의 문서를 핵심만 추려 전달하여 팀원들에게 지혜를 전수합니다." },
+                    { scoreReq: 33, name: "문장의 마술사", desc: "[생산 특화] 딱딱한 글을 상황과 대상에 맞게 자유자재로 변환하는 문장술사입니다." },
                     { scoreReq: 0,  name: "초안의 전령", desc: "[생산 특화] 막막한 백지 상태를 가장 빠르게 돌파하여 팀원들에게 영감을 배달하는 전령입니다." }
                 ],
                 D: [ // 운영/보안 특화
-                    { scoreReq: 17, name: "철벽의 가디언", desc: "[운영 특화] 정보 유출은 절대 불가! 팀의 데이터 보안을 빈틈없이 책임지는 방어 기사입니다." },
-                    { scoreReq: 14, name: "지식의 사서", desc: "[운영 특화] 자신이 알아낸 AI 꿀팁을 체계화하여 팀의 무기고에 수집하고 관리하는 자입니다." },
-                    { scoreReq: 11, name: "템플릿 자산가", desc: "[운영 특화] '이거 쓰면 돼'라며 검증된 명령어 보관함을 공유하는 든든한 자산가입니다." },
+                    { scoreReq: 51, name: "철벽의 가디언", desc: "[운영 특화] 정보 유출은 절대 불가! 팀의 데이터 보안을 빈틈없이 책임지는 방어 기사입니다." },
+                    { scoreReq: 42, name: "지식의 사서", desc: "[운영 특화] 자신이 알아낸 AI 꿀팁을 체계화하여 팀의 무기고에 수집하고 관리하는 자입니다." },
+                    { scoreReq: 33, name: "템플릿 자산가", desc: "[운영 특화] '이거 쓰면 돼'라며 검증된 명령어 보관함을 공유하는 든든한 자산가입니다." },
                     { scoreReq: 0,  name: "규범의 파수꾼", desc: "[운영 특화] AI 사용 시 발생할 수 있는 법적, 윤리적 문제를 미리 방어하는 신중한 파수꾼입니다." }
                 ]
             },
@@ -232,7 +232,7 @@
             ]
         };
 
-        // 답변 척도 데이터
+        // 답변 척도 데이터 (순서 고정)
         const answerScales = [
             { text: "매우 그렇다", score: 5 },
             { text: "그런 편이다", score: 4 },
@@ -245,25 +245,20 @@
         let currentIdx = 0;
         let scores = { A: 0, B: 0, C: 0, D: 0 };
 
-        // 배열 셔플 함수
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+        // 48개 문항을 A -> B -> C -> D 순서로 정적으로 교차 배치
+        function setupQuestions() {
+            selectedQuestions = [];
+            for(let i = 0; i < 12; i++) {
+                selectedQuestions.push({ text: poolA[i], trait: 'A' });
+                selectedQuestions.push({ text: poolB[i], trait: 'B' });
+                selectedQuestions.push({ text: poolC[i], trait: 'C' });
+                selectedQuestions.push({ text: poolD[i], trait: 'D' });
             }
-            return array;
         }
 
-        // 테스트 초기화 및 문제 세팅
+        // 테스트 시작
         function startQuiz() {
-            // 각 풀에서 4문제씩 랜덤 추출
-            const pickedA = shuffleArray([...poolA]).slice(0, 4).map(q => ({ text: q, trait: 'A' }));
-            const pickedB = shuffleArray([...poolB]).slice(0, 4).map(q => ({ text: q, trait: 'B' }));
-            const pickedC = shuffleArray([...poolC]).slice(0, 4).map(q => ({ text: q, trait: 'C' }));
-            const pickedD = shuffleArray([...poolD]).slice(0, 4).map(q => ({ text: q, trait: 'D' }));
-
-            // 총 16문제 합치고 섞기
-            selectedQuestions = shuffleArray([...pickedA, ...pickedB, ...pickedC, ...pickedD]);
+            setupQuestions();
             
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('progress-bar').style.display = 'block';
@@ -275,12 +270,11 @@
             const currentQ = selectedQuestions[currentIdx];
             document.getElementById('question-text').innerText = `Q${currentIdx + 1}. ${currentQ.text}`;
             
-            // 답변 순서 랜덤 섞기
-            const shuffledAnswers = shuffleArray([...answerScales]);
+            // 답변 순서 고정 생성
             const answerContainer = document.getElementById('answer-list');
             answerContainer.innerHTML = ''; // 초기화
 
-            shuffledAnswers.forEach(ans => {
+            answerScales.forEach(ans => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-answer';
                 btn.innerText = ans.text;
@@ -288,8 +282,8 @@
                 answerContainer.appendChild(btn);
             });
 
-            // 프로그레스 바 업데이트
-            const progress = ((currentIdx + 1) / 16) * 100;
+            // 프로그레스 바 업데이트 (총 48문항 기준)
+            const progress = ((currentIdx + 1) / 48) * 100;
             document.getElementById('progress-ing').style.width = `${progress}%`;
         }
 
@@ -325,8 +319,8 @@
             let tierText = "";
             let tierColor = "";
 
-            // 1. 마스터 판정 (총점 68점 이상 & 모든 분야 최소 14점 이상)
-            if (totalScore >= 68 && scores.A >= 14 && scores.B >= 14 && scores.C >= 14 && scores.D >= 14) {
+            // 1. 마스터 판정 (총점 204점 이상 & 모든 분야 최소 42점 이상)
+            if (totalScore >= 204 && scores.A >= 42 && scores.B >= 42 && scores.C >= 42 && scores.D >= 42) {
                 tierText = "MASTER: 최상위 지배자";
                 tierColor = "#f1c40f";
                 // A(설계)+C(생산)이 높으면 총사령관, B(분석)+D(운영)이 높으면 전략의 대가
@@ -336,8 +330,8 @@
                     finalJob = jobs.master[1];
                 }
             } 
-            // 2. 비기너 판정 (총점 36점 미만)
-            else if (totalScore < 36) {
+            // 2. 비기너 판정 (총점 108점 미만)
+            else if (totalScore < 108) {
                 tierText = "BEGINNER: 성장하는 초심자";
                 tierColor = "#95a5a6";
                 if ((scores.A + scores.C) >= (scores.B + scores.D)) {
@@ -364,15 +358,15 @@
             const badge = document.getElementById('tier-badge');
             badge.innerText = tierText;
             badge.style.backgroundColor = tierColor;
-            badge.style.color = (totalScore < 36) ? "white" : "black";
+            badge.style.color = (totalScore < 108) ? "white" : "black";
             
             document.getElementById('result-nickname').innerText = finalJob.name;
             
-            // 결과 상세 설명 및 스탯 출력
+            // 결과 상세 설명 및 스탯 출력 (만점 240점 표기)
             const descHtml = `
                 ${finalJob.desc}
                 <div class="trait-scores">
-                    <strong>나의 AI 스탯 분석 (총 ${totalScore}점)</strong><br>
+                    <strong>나의 AI 스탯 분석 (총 ${totalScore}점 / 240점)</strong><br>
                     📐 설계(A): ${scores.A}점 &nbsp;|&nbsp; 🔍 분석(B): ${scores.B}점<br>
                     ⚡ 생산(C): ${scores.C}점 &nbsp;|&nbsp; 🛡️ 운영(D): ${scores.D}점
                 </div>
