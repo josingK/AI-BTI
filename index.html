@@ -25,20 +25,21 @@
         }
 
         .container {
-            width: 100%;
-            max-width: 540px;
+            width: 90%;
+            max-width: 500px;
             background: white;
             padding: 40px;
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             text-align: center;
             box-sizing: border-box;
+            margin: 20px 0;
         }
 
         /* 메인 시작 화면 */
-        #start-screen h1 { font-size: 2.2rem; margin-bottom: 10px; color: #2c3e50; font-weight: 800; }
+        #start-screen h1 { font-size: 2.2rem; margin-bottom: 10px; color: #2c3e50; font-weight: 800; word-break: keep-all; }
         #start-screen h2 { font-size: 1.2rem; margin-bottom: 10px; color: var(--primary-color); }
-        #start-screen p { color: #7f8c8d; margin-bottom: 30px; line-height: 1.6; }
+        #start-screen p { color: #7f8c8d; margin-bottom: 30px; line-height: 1.6; word-break: keep-all;}
 
         /* 프로그레스 바 */
         .progress-bar {
@@ -62,9 +63,9 @@
         .question-text { font-size: 1.2rem; font-weight: 700; margin-bottom: 25px; line-height: 1.5; min-height: 4.5rem; word-break: keep-all; }
         
         /* 답변 버튼 스타일 */
-        .answer-list { display: flex; flex-direction: column; gap: 12px; }
+        .answer-list { display: flex; flex-direction: column; gap: 10px; }
         .btn-answer {
-            padding: 16px;
+            padding: 15px;
             border: 2px solid #edf2f7;
             border-radius: 12px;
             background: white;
@@ -72,8 +73,9 @@
             font-size: 1rem;
             transition: all 0.2s ease;
             text-align: center;
-            font-weight: 500;
+            font-weight: 600;
             color: #4a5568;
+            word-break: keep-all;
         }
         .btn-answer:hover {
             border-color: var(--primary-color);
@@ -84,14 +86,26 @@
 
         /* 결과 화면 */
         #result-screen { display: none; animation: fadeIn 0.8s; }
-        #result-image { width: 220px; height: 220px; border-radius: 24px; object-fit: cover; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        
+        /* 💡 수정된 이미지 스타일 (크기 축소 및 중앙 정렬) */
+        #result-image {
+            width: 360px;
+            height: 360px;
+            margin: 0 auto 25px auto; /* 완벽한 중앙 정렬 */
+            border-radius: 20px; /* 약간 둥근 사각형 느낌 (완전 원형을 원하면 50%로 변경) */
+            object-fit: cover;
+            display: block;
+            border: 4px solid #edf2f7;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+
         .tier-badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; }
-        .nickname { font-size: 2.2rem; font-weight: 800; margin-bottom: 20px; color: #1a202c; word-break: keep-all;}
-        .result-desc { background: #f8f9fa; padding: 25px; border-radius: 16px; text-align: left; line-height: 1.7; margin-bottom: 25px; font-size: 1rem;}
-        .trait-scores { margin-top: 15px; font-size: 0.9rem; color: #718096; border-top: 1px solid #e2e8f0; padding-top: 15px;}
+        .nickname { font-size: 2rem; font-weight: 800; margin-bottom: 20px; color: #1a202c; word-break: keep-all;}
+        .result-desc { background: #f8f9fa; padding: 20px; border-radius: 16px; text-align: left; line-height: 1.6; margin-bottom: 25px; font-size: 0.95rem; word-break: keep-all;}
+        .trait-scores { margin-top: 15px; font-size: 0.9rem; color: #718096; border-top: 1px solid #e2e8f0; padding-top: 15px; text-align: center;}
         
         .btn-main {
-            padding: 18px 40px;
+            padding: 16px 30px;
             background: var(--primary-color);
             color: white;
             border: none;
@@ -104,6 +118,19 @@
         }
         .btn-main:hover { background: #2980b9; }
 
+        /* 📱 모바일 반응형 디자인 (화면이 작아질 때 깨짐 방지) */
+        @media (max-width: 480px) {
+            .container { padding: 25px 20px; width: 95%; }
+            #start-screen h1 { font-size: 1.8rem; }
+            #start-screen h2 { font-size: 1rem; }
+            .question-text { font-size: 1.1rem; min-height: 4rem;}
+            .btn-answer { padding: 12px; font-size: 0.95rem; }
+            #result-image { width: 220px; height: 220px; } /* 모바일에서는 이미지를 더 작게 */
+            .nickname { font-size: 1.6rem; }
+            .result-desc { font-size: 0.9rem; padding: 15px; }
+            .btn-main { padding: 14px 20px; font-size: 1rem; }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -111,10 +138,10 @@
 
     <div class="container">
         <div id="start-screen">
-            <div style="font-size: 4rem; margin-bottom: 20px;">🤖</div>
+            <div style="font-size: 3.5rem; margin-bottom: 15px;">🤖</div>
             <h2>나의 AI 부캐 찾기</h2>
             <h1>AI-BTI</h1>
-            <p>16개의 상황별 대처법으로 알아보는<br>나만의 생성 AI 활용 직업군 테스트</p>
+            <p>48개의 상세한 상황별 대처법으로 알아보는<br>나만의 생성 AI 활용 직업군 테스트</p>
             <button class="btn-main" onclick="startQuiz()">테스트 시작하기</button>
         </div>
 
@@ -137,7 +164,6 @@
     </div>
 
     <script>
-        // 문항 풀 (트리별 12문항)
         const poolA = [
             "새로운 업무를 받으면 AI를 켜기 전, '어떤 순서로 일을 시킬지' 밑그림부터 그린다.",
             "AI에게 질문할 때 '너는 유능한 팀장이야'라며 상황에 몰입하게 만드는 페르소나를 부여한다.",
@@ -198,36 +224,35 @@
             "저작권이나 윤리적 문제가 발생할 소지가 있는 AI 결과물을 미리 감지하고 방어한다."
         ];
 
-        // 20개 직업 데이터 및 이미지 매칭 (job_01 ~ job_20)
         const jobs = {
             master: [
                 { imageUrl: "./images/job_01.png", name: "AI 총사령관", desc: "AI를 자유자재로 지휘하여 무인 업무 시스템을 지배하는 절대적 리더입니다." },
                 { imageUrl: "./images/job_02.png", name: "전략의 대가", desc: "회사 전체의 AI 표준과 무너지지 않는 지식 체계를 구축하는 설계의 거장입니다." }
             ],
             specialist: {
-                A: [
-                    { scoreReq: 17, imageUrl: "./images/job_03.png", name: "기획의 대가", desc: "[설계 특화] 업무의 뼈대를 단단하게 세우고, AI라는 도구가 들어설 자리를 한 치의 오차 없이 설계하는 거장입니다." },
-                    { scoreReq: 14, imageUrl: "./images/job_04.png", name: "질문의 조율사", desc: "[설계 특화] 사람의 언어를 AI가 가장 잘 이해하는 완벽한 명령어로 다듬는 가교 역할을 합니다." },
-                    { scoreReq: 11, imageUrl: "./images/job_05.png", name: "흐름의 연출가", desc: "[설계 특화] 반복 업무를 보면 무조건 자동화 파이프라인을 짜야 직성이 풀리는 시스템 연출가입니다." },
-                    { scoreReq: 0,  imageUrl: "./images/job_06.png", name: "무대의 설계자", desc: "[설계 특화] 일의 시작과 끝을 완벽한 질문 리스트로 기획하는 꼼꼼한 설계자입니다." }
+                A: [ 
+                    { scoreReq: 51, name: "기획의 대가", desc: "[설계 특화] 업무의 뼈대를 단단하게 세우고, AI라는 도구가 들어설 자리를 한 치의 오차 없이 설계하는 거장입니다.", imageUrl: './images/job_03.png' },
+                    { scoreReq: 42, name: "질문의 조율사", desc: "[설계 특화] 사람의 언어를 AI가 가장 잘 이해하는 완벽한 명령어로 다듬는 가교 역할을 합니다.", imageUrl: './images/job_04.png' },
+                    { scoreReq: 33, name: "흐름의 연출가", desc: "[설계 특화] 반복 업무를 보면 무조건 자동화 파이프라인을 짜야 직성이 풀리는 시스템 연출가입니다.", imageUrl: './images/job_05.png' },
+                    { scoreReq: 0,  name: "무대의 설계자", desc: "[설계 특화] 일의 시작과 끝을 완벽한 질문 리스트로 기획하는 꼼꼼한 설계자입니다.", imageUrl: './images/job_06.png' }
                 ],
-                B: [
-                    { scoreReq: 17, imageUrl: "./images/job_07.png", name: "논리의 심판관", desc: "[분석 특화] AI 답변의 논리적 오류를 귀신같이 찾아내는 깐깐하고 예리한 심판관입니다." },
-                    { scoreReq: 14, imageUrl: "./images/job_08.png", name: "팩트 수사관", desc: "[분석 특화] AI가 거짓말(할루시네이션)을 하는지 끝까지 파헤치는 철저한 검증가입니다." },
-                    { scoreReq: 11, imageUrl: "./images/job_09.png", name: "구조의 감별사", desc: "[분석 특화] 뒤죽박죽인 정보를 완벽한 표와 도표로 깎아내는 정리의 달인입니다." },
-                    { scoreReq: 0,  imageUrl: "./images/job_10.png", name: "검증의 추적자", desc: "[분석 특화] 사소한 수치 하나라도 원문과 대조하여 완벽한 신뢰도를 확보하는 추적 전문가입니다." }
+                B: [ 
+                    { scoreReq: 51, name: "논리의 심판관", desc: "[분석 특화] AI 답변의 논리적 오류를 귀신같이 찾아내는 깐깐하고 예리한 심판관입니다.", imageUrl: './images/job_07.png' },
+                    { scoreReq: 42, name: "팩트 수사관", desc: "[분석 특화] AI가 거짓말(할루시네이션)을 하는지 끝까지 파헤치는 검증가입니다.", imageUrl: './images/job_08.png' },
+                    { scoreReq: 33, name: "구조의 감별사", desc: "[분석 특화] 뒤죽박죽인 정보를 완벽한 표와 도표로 깎아내는 정리의 달인입니다.", imageUrl: './images/job_09.png' },
+                    { scoreReq: 0,  name: "검증의 추적자", desc: "[분석 특화] 사소한 수치 하나라도 원문과 대조하여 완벽한 신뢰도를 확보하는 추적 전문가입니다.", imageUrl: './images/job_10.png' }
                 ],
-                C: [
-                    { scoreReq: 17, imageUrl: "./images/job_11.png", name: "쾌속의 창조자", desc: "[생산 특화] 남들 한 시간 고민할 때 5분 만에 보고서 뼈대를 세우는 속도광입니다." },
-                    { scoreReq: 14, imageUrl: "./images/job_12.png", name: "요약의 현자", desc: "[생산 특화] 방대한 양의 문서를 핵심만 추려 전달하여 팀원들에게 지혜를 전수합니다." },
-                    { scoreReq: 11, imageUrl: "./images/job_13.png", name: "문장의 마술사", desc: "[생산 특화] 딱딱한 글을 상황과 대상에 맞게 자유자재로 변환하는 문장술사입니다." },
-                    { scoreReq: 0,  imageUrl: "./images/job_14.png", name: "초안의 전령", desc: "[생산 특화] 막막한 백지 상태를 가장 빠르게 돌파하여 팀원들에게 영감을 배달하는 전령입니다." }
+                C: [ 
+                    { scoreReq: 51, name: "쾌속의 창조자", desc: "[생산 특화] 남들 한 시간 고민할 때 5분 만에 보고서 뼈대를 세우는 속도광입니다.", imageUrl: './images/job_11.png' },
+                    { scoreReq: 42, name: "요약의 현자", desc: "[생산 특화] 방대한 양의 문서를 핵심만 추려 전달하여 팀원들에게 지혜를 전수합니다.", imageUrl: './images/job_12.png' },
+                    { scoreReq: 33, name: "문장의 마술사", desc: "[생산 특화] 딱딱한 글을 상황과 대상에 맞게 자유자재로 변환하는 문장술사입니다.", imageUrl: './images/job_13.png' },
+                    { scoreReq: 0,  name: "초안의 전령", desc: "[생산 특화] 막막한 백지 상태를 가장 빠르게 돌파하여 팀원들에게 영감을 배달하는 전령입니다.", imageUrl: './images/job_14.png' }
                 ],
-                D: [
-                    { scoreReq: 17, imageUrl: "./images/job_15.png", name: "철벽의 가디언", desc: "[운영 특화] 정보 유출은 절대 불가! 팀의 데이터 보안을 빈틈없이 책임지는 방어 기사입니다." },
-                    { scoreReq: 14, imageUrl: "./images/job_16.png", name: "지식의 사서", desc: "[운영 특화] 자신이 알아낸 AI 꿀팁을 체계화하여 팀의 무기고에 수집하고 관리하는 자입니다." },
-                    { scoreReq: 11, imageUrl: "./images/job_17.png", name: "템플릿 자산가", desc: "[운영 특화] '이거 쓰면 돼'라며 검증된 명령어 보관함을 공유하는 든든한 자산가입니다." },
-                    { scoreReq: 0,  imageUrl: "./images/job_18.png", name: "규범의 파수꾼", desc: "[운영 특화] AI 사용 시 발생할 수 있는 법적, 윤리적 문제를 미리 방어하는 신중한 파수꾼입니다." }
+                D: [ 
+                    { scoreReq: 51, name: "철벽의 가디언", desc: "[운영 특화] 정보 유출은 절대 불가! 팀의 데이터 보안을 빈틈없이 책임지는 방어 기사입니다.", imageUrl: './images/job_15.png' },
+                    { scoreReq: 42, name: "지식의 사서", desc: "[운영 특화] 자신이 알아낸 AI 꿀팁을 체계화하여 팀의 무기고에 수집하고 관리하는 자입니다.", imageUrl: './images/job_16.png' },
+                    { scoreReq: 33, name: "템플릿 자산가", desc: "[운영 특화] '이거 쓰면 돼'라며 검증된 명령어 보관함을 공유하는 자산가입니다.", imageUrl: './images/job_17.png' },
+                    { scoreReq: 0,  name: "규범의 파수꾼", desc: "[운영 특화] AI 사용 시 발생할 수 있는 법적, 윤리적 문제를 미리 방어하는 신중한 파수꾼입니다.", imageUrl: './images/job_18.png' }
                 ]
             },
             beginner: [
@@ -248,22 +273,18 @@
         let currentIdx = 0;
         let scores = { A: 0, B: 0, C: 0, D: 0 };
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+        function setupQuestions() {
+            selectedQuestions = [];
+            for(let i = 0; i < 12; i++) {
+                selectedQuestions.push({ text: poolA[i], trait: 'A' });
+                selectedQuestions.push({ text: poolB[i], trait: 'B' });
+                selectedQuestions.push({ text: poolC[i], trait: 'C' });
+                selectedQuestions.push({ text: poolD[i], trait: 'D' });
             }
-            return array;
         }
 
         function startQuiz() {
-            const pickedA = shuffleArray([...poolA]).slice(0, 4).map(q => ({ text: q, trait: 'A' }));
-            const pickedB = shuffleArray([...poolB]).slice(0, 4).map(q => ({ text: q, trait: 'B' }));
-            const pickedC = shuffleArray([...poolC]).slice(0, 4).map(q => ({ text: q, trait: 'C' }));
-            const pickedD = shuffleArray([...poolD]).slice(0, 4).map(q => ({ text: q, trait: 'D' }));
-
-            selectedQuestions = shuffleArray([...pickedA, ...pickedB, ...pickedC, ...pickedD]);
-            
+            setupQuestions();
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('progress-bar').style.display = 'block';
             document.getElementById('quiz-screen').style.display = 'block';
@@ -274,11 +295,10 @@
             const currentQ = selectedQuestions[currentIdx];
             document.getElementById('question-text').innerText = `Q${currentIdx + 1}. ${currentQ.text}`;
             
-            const shuffledAnswers = shuffleArray([...answerScales]);
             const answerContainer = document.getElementById('answer-list');
             answerContainer.innerHTML = ''; 
 
-            shuffledAnswers.forEach(ans => {
+            answerScales.forEach(ans => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-answer';
                 btn.innerText = ans.text;
@@ -286,13 +306,12 @@
                 answerContainer.appendChild(btn);
             });
 
-            const progress = ((currentIdx + 1) / 16) * 100;
+            const progress = ((currentIdx + 1) / 48) * 100;
             document.getElementById('progress-ing').style.width = `${progress}%`;
         }
 
         function handleAnswer(trait, score) {
             scores[trait] += score; 
-            
             if (currentIdx < selectedQuestions.length - 1) {
                 currentIdx++;
                 showQuestion();
@@ -321,7 +340,7 @@
             let tierText = "";
             let tierColor = "";
 
-            if (totalScore >= 68 && scores.A >= 14 && scores.B >= 14 && scores.C >= 14 && scores.D >= 14) {
+            if (totalScore >= 204 && scores.A >= 42 && scores.B >= 42 && scores.C >= 42 && scores.D >= 42) {
                 tierText = "MASTER: 최상위 지배자";
                 tierColor = "#f1c40f";
                 if ((scores.A + scores.C) >= (scores.B + scores.D)) {
@@ -330,7 +349,7 @@
                     finalJob = jobs.master[1];
                 }
             } 
-            else if (totalScore < 36) {
+            else if (totalScore < 108) {
                 tierText = "BEGINNER: 성장하는 초심자";
                 tierColor = "#95a5a6";
                 if ((scores.A + scores.C) >= (scores.B + scores.D)) {
@@ -342,7 +361,6 @@
             else {
                 tierText = "SPECIALIST: 실무 최적화 고수";
                 tierColor = "#2ecc71";
-                
                 const traitJobs = jobs.specialist[maxTrait];
                 for(let i=0; i<traitJobs.length; i++){
                     if(maxScore >= traitJobs[i].scoreReq){
@@ -352,21 +370,22 @@
                 }
             }
 
-            // 결과 화면 업데이트
             const badge = document.getElementById('tier-badge');
             badge.innerText = tierText;
             badge.style.backgroundColor = tierColor;
-            badge.style.color = (totalScore < 36) ? "white" : "black";
+            badge.style.color = (totalScore < 108) ? "white" : "black";
             
             document.getElementById('result-nickname').innerText = finalJob.name;
             
-            // 이미지 띄우기
-            document.getElementById('result-image').src = finalJob.imageUrl;
-            
+            // 이미지 출력 적용
+            const resultImage = document.getElementById('result-image');
+            resultImage.src = finalJob.imageUrl;
+            resultImage.style.display = 'block';
+
             const descHtml = `
                 ${finalJob.desc}
                 <div class="trait-scores">
-                    <strong>나의 AI 스탯 분석 (총 ${totalScore}점)</strong><br>
+                    <strong>📊 나의 AI 스탯 분석 (총 ${totalScore}점 / 240점)</strong><br><br>
                     📐 설계(A): ${scores.A}점 &nbsp;|&nbsp; 🔍 분석(B): ${scores.B}점<br>
                     ⚡ 생산(C): ${scores.C}점 &nbsp;|&nbsp; 🛡️ 운영(D): ${scores.D}점
                 </div>
