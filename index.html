@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI-BTI: 나의 AI 부캐 찾기</title>
+    
+    <meta property="og:title" content="AI-BTI: 나의 AI 부캐 찾기">
+    <meta property="og:description" content="48개의 실무 상황으로 알아보는 나의 생성 AI 활용 직업군 테스트!">
+    <meta property="og:image" content="https://josingk.github.io/AI-BTI/images/thumbnail.jpg">
+    <meta property="og:url" content="https://josingk.github.io/AI-BTI/">
+    <meta property="og:type" content="website">
+
     <style>
         :root {
             --primary-color: #3498db;
@@ -34,6 +41,7 @@
             text-align: center;
             box-sizing: border-box;
             margin: 20px 0;
+            position: relative;
         }
 
         /* 메인 시작 화면 */
@@ -101,7 +109,7 @@
         .tier-badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; }
         .nickname { font-size: 2rem; font-weight: 800; margin-bottom: 20px; color: #1a202c; word-break: keep-all;}
         
-        /* 💡 상세 결과 뷰 스타일 */
+        /* 상세 결과 뷰 스타일 */
         .result-desc { background: #f8f9fa; padding: 25px; border-radius: 16px; text-align: left; margin-bottom: 25px; }
         .desc-main { font-size: 1.05rem; line-height: 1.6; color: #2c3e50; margin-bottom: 20px; word-break: keep-all; font-weight: 500;}
         
@@ -156,13 +164,23 @@
         }
         .btn-main:hover { background: #2980b9; }
 
+        /* 저작권 문구 스타일 */
+        .copyright {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #a0aec0;
+            text-align: center;
+            border-top: 1px solid #edf2f7;
+            padding-top: 20px;
+        }
+
         @media (max-width: 480px) {
             .container { padding: 25px 20px; width: 95%; }
             #start-screen h1 { font-size: 1.8rem; }
             #start-screen h2 { font-size: 1rem; }
             .question-text { font-size: 1.1rem; min-height: 4rem;}
             .btn-answer { padding: 12px; font-size: 0.95rem; }
-            #result-image { width: 280px; height: 280px; } 
+            #result-image { width: 220px; height: 220px; } 
             .nickname { font-size: 1.6rem; }
             .result-desc { padding: 15px; }
             .desc-main { font-size: 0.95rem; }
@@ -198,6 +216,10 @@
             <div class="nickname" id="result-nickname">부캐명</div>
             <div class="result-desc" id="result-desc">설명</div>
             <button class="btn-main" onclick="location.reload()">다시 테스트하기</button>
+        </div>
+
+        <div class="copyright">
+            © 2026 조재환(JOSING). All rights reserved.
         </div>
     </div>
 
@@ -262,7 +284,6 @@
             "저작권이나 윤리적 문제가 발생할 소지가 있는 AI 결과물을 미리 감지하고 방어한다."
         ];
 
-        // 💡 20개 직업별 강점(strengths)과 다음 퀘스트(mission) 데이터 추가
         const jobs = {
             master: [
                 { imageUrl: "images/job_01.png", name: "AI 총사령관", desc: "AI를 자유자재로 지휘하여 무인 업무 시스템을 지배하는 절대적 리더입니다.", strengths: ["AI와 대화할 때 결과물의 최종 형태가 이미 머릿속에 완성되어 있음", "단순한 명령어(프롬프트)가 아닌, 에이전트 간의 시스템적 연결을 주도함"], mission: "팀의 반복 업무를 완전히 무인화할 수 있는 '자동화 파이프라인' 1개 설계 및 시범 운영하기" },
@@ -273,7 +294,7 @@
                     { scoreReq: 51, name: "기획의 대가", desc: "[설계 특화] 업무의 뼈대를 단단하게 세우고, AI라는 도구가 들어설 자리를 한 치의 오차 없이 설계하는 거장입니다.", imageUrl: 'images/job_03.png', strengths: ["복잡한 프로젝트를 시작하기 전, 목표와 체크포인트를 완벽하게 분해함", "중간에 길을 잃지 않도록 AI에게 맥락과 상황을 명확히 부여함"], mission: "다음 프로젝트 시작 전 '목표 3개 + 실패 방지점 3개'를 AI와 함께 미리 정의해보기" },
                     { scoreReq: 42, name: "질문의 조율사", desc: "[설계 특화] 사람의 언어를 AI가 가장 잘 이해하는 완벽한 명령어로 다듬는 가교 역할을 합니다.", imageUrl: 'images/job_04.png', strengths: ["AI가 엉뚱한 대답을 하지 못하도록 처음부터 조건을 정밀하게 좁힘", "원하는 결과가 나올 때까지 프롬프트를 깎고 다듬는 집요함"], mission: "가장 답변이 잘 나왔던 나의 '인생 프롬프트' 3개를 골라 원리 분석해보기" },
                     { scoreReq: 33, name: "흐름의 연출가", desc: "[설계 특화] 반복 업무를 보면 무조건 자동화 파이프라인을 짜야 직성이 풀리는 시스템 연출가입니다.", imageUrl: 'images/job_05.png', strengths: ["단순 반복되는 업무의 패턴을 귀신같이 찾아냄", "입력과 출력 사이의 과정을 최소화하는 지름길을 잘 발견함"], mission: "매일 하는 자잘한 업무 1개를 찾아, AI를 활용해 5분 이내로 끝내는 '루틴' 만들기" },
-                    { scoreReq: 0,  name: "무대의 설계자", desc: "[설계 특화] 일의 시작과 끝을 완벽한 질문 리스트로 기획하는 꼼꼼한 설계자입니다.", imageUrl: 'job_06.png', strengths: ["무작정 지시하기보다, 질문을 통해 방향성을 짚어가는 체계적인 접근", "다양한 AI 도구를 상황에 맞게 엮어서 활용하는 응용력"], mission: "이번 주 업무 중 하나를 고르고, AI에게 시킬 작업 순서를 1~5단계로 분해해보기" }
+                    { scoreReq: 0,  name: "무대의 설계자", desc: "[설계 특화] 일의 시작과 끝을 완벽한 질문 리스트로 기획하는 꼼꼼한 설계자입니다.", imageUrl: 'images/job_06.png', strengths: ["무작정 지시하기보다, 질문을 통해 방향성을 짚어가는 체계적인 접근", "다양한 AI 도구를 상황에 맞게 엮어서 활용하는 응용력"], mission: "이번 주 업무 중 하나를 고르고, AI에게 시킬 작업 순서를 1~5단계로 분해해보기" }
                 ],
                 B: [ 
                     { scoreReq: 51, name: "논리의 심판관", desc: "[분석 특화] AI 답변의 논리적 오류를 귀신같이 찾아내는 깐깐하고 예리한 심판관입니다.", imageUrl: 'images/job_07.png', strengths: ["글의 문맥이나 수치에서 앞뒤가 맞지 않는 논리적 모순을 순식간에 파악함", "그럴듯한 AI의 거짓말(할루시네이션)에 절대 속지 않는 방어력"], mission: "AI가 작성한 긴 보고서에서 오류 3가지를 찾아내고, 어떻게 수정했는지 기록 남기기" },
@@ -420,7 +441,6 @@
             resultImage.src = finalJob.imageUrl;
             resultImage.style.display = 'block';
 
-            // 💡 추가된 상세 설명 HTML 템플릿
             let strengthsList = finalJob.strengths.map(s => `<li>${s}</li>`).join('');
             
             const descHtml = `
