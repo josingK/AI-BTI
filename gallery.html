@@ -385,8 +385,7 @@
                 document.body.style.overflow = 'auto'; // 뒤쪽 배경 스크롤 복구
             }
         }
-    </script>
-    // URL 파라미터를 읽어서 특정 카드가 클릭된 채로 열리게 하는 자동 팝업 로직
+        // URL 파라미터를 읽어서 특정 카드가 클릭된 채로 열리게 하는 자동 팝업 로직
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const jobId = urlParams.get('id'); // 예: gallery.html?id=3
@@ -398,5 +397,6 @@
                 }
             }
         };
+    </script>
 </body>
 </html>
