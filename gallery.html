@@ -386,5 +386,17 @@
             }
         }
     </script>
+    // URL 파라미터를 읽어서 특정 카드가 클릭된 채로 열리게 하는 자동 팝업 로직
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('id'); // 예: gallery.html?id=3
+            
+            if (jobId) {
+                const jobToOpen = jobsData.find(j => j.id == parseInt(jobId));
+                if (jobToOpen) {
+                    openModal(jobToOpen);
+                }
+            }
+        };
 </body>
 </html>
